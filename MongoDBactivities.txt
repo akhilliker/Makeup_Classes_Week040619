@@ -1,0 +1,829 @@
+Last login: Fri Apr 26 17:11:01 on ttys003
+(base) m1-bio-ahillike:~ ahillike$ mongo
+MongoDB shell version v4.0.3
+connecting to: mongodb://127.0.0.1:27017
+Implicit session: session { "id" : UUID("c812d790-9784-49be-80b1-d7d806724c78") }
+MongoDB server version: 4.0.3
+Welcome to the MongoDB shell.
+For interactive help, type "help".
+For more comprehensive documentation, see
+	http://docs.mongodb.org/
+Questions? Try the support group
+	http://groups.google.com/group/mongodb-user
+Server has startup warnings: 
+2019-04-25T16:38:05.938-0400 I CONTROL  [initandlisten] 
+2019-04-25T16:38:05.938-0400 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2019-04-25T16:38:05.938-0400 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2019-04-25T16:38:05.938-0400 I CONTROL  [initandlisten] 
+2019-04-25T16:38:05.938-0400 I CONTROL  [initandlisten] ** WARNING: This server is bound to localhost.
+2019-04-25T16:38:05.938-0400 I CONTROL  [initandlisten] **          Remote systems will be unable to connect to this server. 
+2019-04-25T16:38:05.938-0400 I CONTROL  [initandlisten] **          Start the server with --bind_ip <address> to specify which IP 
+2019-04-25T16:38:05.938-0400 I CONTROL  [initandlisten] **          addresses it should serve responses from, or with --bind_ip_all to
+2019-04-25T16:38:05.938-0400 I CONTROL  [initandlisten] **          bind to all interfaces. If this behavior is desired, start the
+2019-04-25T16:38:05.939-0400 I CONTROL  [initandlisten] **          server with --bind_ip 127.0.0.1 to disable this warning.
+2019-04-25T16:38:05.939-0400 I CONTROL  [initandlisten] 
+2019-04-25T16:38:05.939-0400 I CONTROL  [initandlisten] 
+2019-04-25T16:38:05.939-0400 I CONTROL  [initandlisten] ** WARNING: soft rlimits too low. Number of files is 256, should be at least 1000
+---
+Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+and anyone you share the URL with. MongoDB may use this information to make product
+improvements and to suggest MongoDB products and deployment options to you.
+
+To enable free monitoring, run the following command: db.enableFreeMonitoring()
+To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+
+> use class2DB
+switched to db class2DB
+> db.createCollection("students")
+{ "ok" : 1 }
+> show dbs
+Hilliker_Lab_db  0.000GB
+admin            0.000GB
+class2DB         0.000GB
+classDB          0.000GB
+config           0.000GB
+craigslist_db    0.000GB
+local            0.000GB
+nhl_db           0.000GB
+> use class2DB
+switched to db class2DB
+> show collections
+students
+> class2DB.students.insert({"name" : "Angie", "age" : 41, "occupation" : "biology professor", "hobby" : ["flute", "pottery", "baking"]})
+2019-04-26T21:15:30.107-0400 E QUERY    [js] ReferenceError: class2DB is not defined :
+@(shell):1:1
+> db.students.insert({"name" : "Angie", "age" : 41, "occupation" : "biology professor", "hobby" : ["flute", "pottery", "baking"]})
+WriteResult({ "nInserted" : 1 })
+> db.students.find().pretty()
+{
+	"_id" : ObjectId("5cc3ad4c5cb82377a8c06dbe"),
+	"name" : "Angie",
+	"age" : 41,
+	"occupation" : "biology professor",
+	"hobby" : [
+		"flute",
+		"pottery",
+		"baking"
+	]
+}
+> db.students.update({"name":"Angie"}, {$push: {"pythonLib" : "matplotlib"}}, {upsert: true})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.find().pretty()
+{
+	"_id" : ObjectId("5cc3ad4c5cb82377a8c06dbe"),
+	"name" : "Angie",
+	"age" : 41,
+	"occupation" : "biology professor",
+	"hobby" : [
+		"flute",
+		"pottery",
+		"baking"
+	],
+	"pythonLib" : [
+		"matplotlib"
+	]
+}
+> db.students.insert({"name" : "Phil", "age" : 40, "occupation" : "writer and illustrator", "hobby" : ["movies", "woodworking", "reading", "vinyl", "board games"], "pythonLib" : "whats that"})
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({"name" : "Phinneas", "age" : 8, "occupation" : "sweet and adorable kid", "hobby" : ["Minecraft", "legos", "reading", "inventing"], "pythonLib" : "no python only scratch"})
+WriteResult({ "nInserted" : 1 })
+> db.students.find().pretty()
+{
+	"_id" : ObjectId("5cc3ad4c5cb82377a8c06dbe"),
+	"name" : "Angie",
+	"age" : 41,
+	"occupation" : "biology professor",
+	"hobby" : [
+		"flute",
+		"pottery",
+		"baking"
+	],
+	"pythonLib" : [
+		"matplotlib"
+	]
+}
+{
+	"_id" : ObjectId("5cc3afab5cb82377a8c06dbf"),
+	"name" : "Phil",
+	"age" : 40,
+	"occupation" : "writer and illustrator",
+	"hobby" : [
+		"movies",
+		"woodworking",
+		"reading",
+		"vinyl",
+		"board games"
+	],
+	"pythonLib" : "whats that"
+}
+{
+	"_id" : ObjectId("5cc3b0095cb82377a8c06dc0"),
+	"name" : "Phinneas",
+	"age" : 8,
+	"occupation" : "sweet and adorable kid",
+	"hobby" : [
+		"Minecraft",
+		"legos",
+		"reading",
+		"inventing"
+	],
+	"pythonLib" : "no python only scratch"
+}
+> db.students.find({"age": <20}).pretty()
+2019-04-26T21:28:41.740-0400 E QUERY    [js] SyntaxError: expected expression, got '<' @(shell):1:25
+> db.students.find({"age": 8}).pretty()
+{
+	"_id" : ObjectId("5cc3b0095cb82377a8c06dc0"),
+	"name" : "Phinneas",
+	"age" : 8,
+	"occupation" : "sweet and adorable kid",
+	"hobby" : [
+		"Minecraft",
+		"legos",
+		"reading",
+		"inventing"
+	],
+	"pythonLib" : "no python only scratch"
+}
+> db.students.find({"name": "Phil"}).pretty()
+{
+	"_id" : ObjectId("5cc3afab5cb82377a8c06dbf"),
+	"name" : "Phil",
+	"age" : 40,
+	"occupation" : "writer and illustrator",
+	"hobby" : [
+		"movies",
+		"woodworking",
+		"reading",
+		"vinyl",
+		"board games"
+	],
+	"pythonLib" : "whats that"
+}
+> db.students.find({"_id": "5cc3afab5cb82377a8c06dbf"}).pretty()
+> db.students.find({_id: "5cc3afab5cb82377a8c06dbf"}).pretty()
+> db.students.find({_id: ObjectId("5cc3afab5cb82377a8c06dbf")}).pretty()
+{
+	"_id" : ObjectId("5cc3afab5cb82377a8c06dbf"),
+	"name" : "Phil",
+	"age" : 40,
+	"occupation" : "writer and illustrator",
+	"hobby" : [
+		"movies",
+		"woodworking",
+		"reading",
+		"vinyl",
+		"board games"
+	],
+	"pythonLib" : "whats that"
+}
+> db.students.update({"name":"Phinn"}, {$set: {"age":9}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.students.find({"name": "Phinn"}).pretty()
+> db.students.find().pretty()
+{
+	"_id" : ObjectId("5cc3ad4c5cb82377a8c06dbe"),
+	"name" : "Angie",
+	"age" : 41,
+	"occupation" : "biology professor",
+	"hobby" : [
+		"flute",
+		"pottery",
+		"baking"
+	],
+	"pythonLib" : [
+		"matplotlib"
+	]
+}
+{
+	"_id" : ObjectId("5cc3afab5cb82377a8c06dbf"),
+	"name" : "Phil",
+	"age" : 40,
+	"occupation" : "writer and illustrator",
+	"hobby" : [
+		"movies",
+		"woodworking",
+		"reading",
+		"vinyl",
+		"board games"
+	],
+	"pythonLib" : "whats that"
+}
+{
+	"_id" : ObjectId("5cc3b0095cb82377a8c06dc0"),
+	"name" : "Phinneas",
+	"age" : 8,
+	"occupation" : "sweet and adorable kid",
+	"hobby" : [
+		"Minecraft",
+		"legos",
+		"reading",
+		"inventing"
+	],
+	"pythonLib" : "no python only scratch"
+}
+> db.students.update({"name":"Phinneas"}, {$set: {"age":9}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.find({"name": "Phinn"}).pretty()
+> db.students.find({"name": "Phinneas"}).pretty()
+{
+	"_id" : ObjectId("5cc3b0095cb82377a8c06dc0"),
+	"name" : "Phinneas",
+	"age" : 9,
+	"occupation" : "sweet and adorable kid",
+	"hobby" : [
+		"Minecraft",
+		"legos",
+		"reading",
+		"inventing"
+	],
+	"pythonLib" : "no python only scratch"
+}
+> db.students.insert({"name" : "Phil", "age" : 8, "occupation" : "kid", "hobby" : ["Star Wars", "action figures", "cartoons", "drawing"], "pythonLib" : "Cobra Commander is cool"})
+WriteResult({ "nInserted" : 1 })
+> db.students.find().pretty()
+{
+	"_id" : ObjectId("5cc3ad4c5cb82377a8c06dbe"),
+	"name" : "Angie",
+	"age" : 41,
+	"occupation" : "biology professor",
+	"hobby" : [
+		"flute",
+		"pottery",
+		"baking"
+	],
+	"pythonLib" : [
+		"matplotlib"
+	]
+}
+{
+	"_id" : ObjectId("5cc3afab5cb82377a8c06dbf"),
+	"name" : "Phil",
+	"age" : 40,
+	"occupation" : "writer and illustrator",
+	"hobby" : [
+		"movies",
+		"woodworking",
+		"reading",
+		"vinyl",
+		"board games"
+	],
+	"pythonLib" : "whats that"
+}
+{
+	"_id" : ObjectId("5cc3b0095cb82377a8c06dc0"),
+	"name" : "Phinneas",
+	"age" : 9,
+	"occupation" : "sweet and adorable kid",
+	"hobby" : [
+		"Minecraft",
+		"legos",
+		"reading",
+		"inventing"
+	],
+	"pythonLib" : "no python only scratch"
+}
+{
+	"_id" : ObjectId("5cc3b5845cb82377a8c06dc1"),
+	"name" : "Phil",
+	"age" : 8,
+	"occupation" : "kid",
+	"hobby" : [
+		"Star Wars",
+		"action figures",
+		"cartoons",
+		"drawing"
+	],
+	"pythonLib" : "Cobra Commander is cool"
+}
+> db.students.update({"name":"Phil"}, {$set: {"age":40.5}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.find().pretty()
+{
+	"_id" : ObjectId("5cc3ad4c5cb82377a8c06dbe"),
+	"name" : "Angie",
+	"age" : 41,
+	"occupation" : "biology professor",
+	"hobby" : [
+		"flute",
+		"pottery",
+		"baking"
+	],
+	"pythonLib" : [
+		"matplotlib"
+	]
+}
+{
+	"_id" : ObjectId("5cc3afab5cb82377a8c06dbf"),
+	"name" : "Phil",
+	"age" : 40.5,
+	"occupation" : "writer and illustrator",
+	"hobby" : [
+		"movies",
+		"woodworking",
+		"reading",
+		"vinyl",
+		"board games"
+	],
+	"pythonLib" : "whats that"
+}
+{
+	"_id" : ObjectId("5cc3b0095cb82377a8c06dc0"),
+	"name" : "Phinneas",
+	"age" : 9,
+	"occupation" : "sweet and adorable kid",
+	"hobby" : [
+		"Minecraft",
+		"legos",
+		"reading",
+		"inventing"
+	],
+	"pythonLib" : "no python only scratch"
+}
+{
+	"_id" : ObjectId("5cc3b5845cb82377a8c06dc1"),
+	"name" : "Phil",
+	"age" : 8,
+	"occupation" : "kid",
+	"hobby" : [
+		"Star Wars",
+		"action figures",
+		"cartoons",
+		"drawing"
+	],
+	"pythonLib" : "Cobra Commander is cool"
+}
+> db.students.updateMany({"name":"Phil"}, {$set: {"hobby":"foodie"}})
+{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }
+> db.students.find().pretty()
+{
+	"_id" : ObjectId("5cc3ad4c5cb82377a8c06dbe"),
+	"name" : "Angie",
+	"age" : 41,
+	"occupation" : "biology professor",
+	"hobby" : [
+		"flute",
+		"pottery",
+		"baking"
+	],
+	"pythonLib" : [
+		"matplotlib"
+	]
+}
+{
+	"_id" : ObjectId("5cc3afab5cb82377a8c06dbf"),
+	"name" : "Phil",
+	"age" : 40.5,
+	"occupation" : "writer and illustrator",
+	"hobby" : "foodie",
+	"pythonLib" : "whats that"
+}
+{
+	"_id" : ObjectId("5cc3b0095cb82377a8c06dc0"),
+	"name" : "Phinneas",
+	"age" : 9,
+	"occupation" : "sweet and adorable kid",
+	"hobby" : [
+		"Minecraft",
+		"legos",
+		"reading",
+		"inventing"
+	],
+	"pythonLib" : "no python only scratch"
+}
+{
+	"_id" : ObjectId("5cc3b5845cb82377a8c06dc1"),
+	"name" : "Phil",
+	"age" : 8,
+	"occupation" : "kid",
+	"hobby" : "foodie",
+	"pythonLib" : "Cobra Commander is cool"
+}
+> db.students.update({"name":"Phil"}, {$set: {"hobby":["foodie", "art", "reading", "woodworking", "movies", "vinyl"]}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.update({"occupation":"kid"}, {$set: {"hobby":["foodie", "drawing", "reading", "action figures", "Star Wars", "GI Joe"]}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.update({"name":"Erica"}, {$set: {"hobby":["foodie", "museums", "movies", "ballroom dancing", "RPGs"]}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.students.find().pretty()
+{
+	"_id" : ObjectId("5cc3ad4c5cb82377a8c06dbe"),
+	"name" : "Angie",
+	"age" : 41,
+	"occupation" : "biology professor",
+	"hobby" : [
+		"flute",
+		"pottery",
+		"baking"
+	],
+	"pythonLib" : [
+		"matplotlib"
+	]
+}
+{
+	"_id" : ObjectId("5cc3afab5cb82377a8c06dbf"),
+	"name" : "Phil",
+	"age" : 40.5,
+	"occupation" : "writer and illustrator",
+	"hobby" : [
+		"foodie",
+		"art",
+		"reading",
+		"woodworking",
+		"movies",
+		"vinyl"
+	],
+	"pythonLib" : "whats that"
+}
+{
+	"_id" : ObjectId("5cc3b0095cb82377a8c06dc0"),
+	"name" : "Phinneas",
+	"age" : 9,
+	"occupation" : "sweet and adorable kid",
+	"hobby" : [
+		"Minecraft",
+		"legos",
+		"reading",
+		"inventing"
+	],
+	"pythonLib" : "no python only scratch"
+}
+{
+	"_id" : ObjectId("5cc3b5845cb82377a8c06dc1"),
+	"name" : "Phil",
+	"age" : 8,
+	"occupation" : "kid",
+	"hobby" : [
+		"foodie",
+		"drawing",
+		"reading",
+		"action figures",
+		"Star Wars",
+		"GI Joe"
+	],
+	"pythonLib" : "Cobra Commander is cool"
+}
+> db.students.update({"name":"Erica"}, {$set: {"hobby":["foodie", "museums", "movies", "ballroom dancing", "RPGs"]}}, {upsert: true})
+WriteResult({
+	"nMatched" : 0,
+	"nUpserted" : 1,
+	"nModified" : 0,
+	"_id" : ObjectId("5cc3b7055c5bfb027e6f2e38")
+})
+> db.students.find().pretty()
+{
+	"_id" : ObjectId("5cc3ad4c5cb82377a8c06dbe"),
+	"name" : "Angie",
+	"age" : 41,
+	"occupation" : "biology professor",
+	"hobby" : [
+		"flute",
+		"pottery",
+		"baking"
+	],
+	"pythonLib" : [
+		"matplotlib"
+	]
+}
+{
+	"_id" : ObjectId("5cc3afab5cb82377a8c06dbf"),
+	"name" : "Phil",
+	"age" : 40.5,
+	"occupation" : "writer and illustrator",
+	"hobby" : [
+		"foodie",
+		"art",
+		"reading",
+		"woodworking",
+		"movies",
+		"vinyl"
+	],
+	"pythonLib" : "whats that"
+}
+{
+	"_id" : ObjectId("5cc3b0095cb82377a8c06dc0"),
+	"name" : "Phinneas",
+	"age" : 9,
+	"occupation" : "sweet and adorable kid",
+	"hobby" : [
+		"Minecraft",
+		"legos",
+		"reading",
+		"inventing"
+	],
+	"pythonLib" : "no python only scratch"
+}
+{
+	"_id" : ObjectId("5cc3b5845cb82377a8c06dc1"),
+	"name" : "Phil",
+	"age" : 8,
+	"occupation" : "kid",
+	"hobby" : [
+		"foodie",
+		"drawing",
+		"reading",
+		"action figures",
+		"Star Wars",
+		"GI Joe"
+	],
+	"pythonLib" : "Cobra Commander is cool"
+}
+{
+	"_id" : ObjectId("5cc3b7055c5bfb027e6f2e38"),
+	"name" : "Erica",
+	"hobby" : [
+		"foodie",
+		"museums",
+		"movies",
+		"ballroom dancing",
+		"RPGs"
+	]
+}
+> db.students.remove({"name" : "Erica"}, {justOne: true})
+WriteResult({ "nRemoved" : 1 })
+> db.students.find().pretty()
+{
+	"_id" : ObjectId("5cc3ad4c5cb82377a8c06dbe"),
+	"name" : "Angie",
+	"age" : 41,
+	"occupation" : "biology professor",
+	"hobby" : [
+		"flute",
+		"pottery",
+		"baking"
+	],
+	"pythonLib" : [
+		"matplotlib"
+	]
+}
+{
+	"_id" : ObjectId("5cc3afab5cb82377a8c06dbf"),
+	"name" : "Phil",
+	"age" : 40.5,
+	"occupation" : "writer and illustrator",
+	"hobby" : [
+		"foodie",
+		"art",
+		"reading",
+		"woodworking",
+		"movies",
+		"vinyl"
+	],
+	"pythonLib" : "whats that"
+}
+{
+	"_id" : ObjectId("5cc3b0095cb82377a8c06dc0"),
+	"name" : "Phinneas",
+	"age" : 9,
+	"occupation" : "sweet and adorable kid",
+	"hobby" : [
+		"Minecraft",
+		"legos",
+		"reading",
+		"inventing"
+	],
+	"pythonLib" : "no python only scratch"
+}
+{
+	"_id" : ObjectId("5cc3b5845cb82377a8c06dc1"),
+	"name" : "Phil",
+	"age" : 8,
+	"occupation" : "kid",
+	"hobby" : [
+		"foodie",
+		"drawing",
+		"reading",
+		"action figures",
+		"Star Wars",
+		"GI Joe"
+	],
+	"pythonLib" : "Cobra Commander is cool"
+}
+> db.students.remove({})
+WriteResult({ "nRemoved" : 4 })
+> db.students.find().pretty()
+> show db
+2019-04-26T22:02:27.708-0400 E QUERY    [js] Error: don't know how to show [db] :
+shellHelper.show@src/mongo/shell/utils.js:1055:11
+shellHelper@src/mongo/shell/utils.js:766:15
+@(shellhelp2):1:1
+> show dbs
+Hilliker_Lab_db  0.000GB
+admin            0.000GB
+class2DB         0.000GB
+classDB          0.000GB
+config           0.000GB
+craigslist_db    0.000GB
+local            0.000GB
+nhl_db           0.000GB
+> use class2DB
+switched to db class2DB
+> db.dropDatabase()
+{ "dropped" : "class2DB", "ok" : 1 }
+> show dbs
+Hilliker_Lab_db  0.000GB
+admin            0.000GB
+classDB          0.000GB
+config           0.000GB
+craigslist_db    0.000GB
+local            0.000GB
+nhl_db           0.000GB
+> use Dumpter_DB
+switched to db Dumpter_DB
+> db.createCollection("divers")
+{ "ok" : 1 }
+> db.divers.insert({"name":"Angie", "yearsDiving": 3, "stillDiving": false, "bestFinds": "midcentury modern desk"})
+WriteResult({ "nInserted" : 1 })
+> db.divers.insert({"name":"Erica", "yearsDiving": 20, "stillDiving": true, "bestFinds": "jerky boyfriends"})
+WriteResult({ "nInserted" : 1 })
+> db.divers.insert({"name":"Lee Ann", "yearsDiving": 40, "stillDiving": true, "bestFinds": "rocking chair"})
+WriteResult({ "nInserted" : 1 })
+> db.divers.update({"name":"Angie"}, {$set:{"yearsDiving": 4}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.divers.update({"name":"Erica"}, {$set:{"yearsDiving": 21}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.divers.update({"name":"Lee Ann"}, {$set:{"yearsDiving": 41}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.divers.update({"name":"Lee Ann"}, {$set:{"stillDiving": false}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.divers.update({"name":"Lee Ann"}, {$set:{$push:{"bestFinds": "kids books"}})
+... :q
+... ^C
+
+> db.divers.update({"name":"Lee Ann"}, {$push:{"bestFinds": "kids books"}})
+WriteResult({
+	"nMatched" : 0,
+	"nUpserted" : 0,
+	"nModified" : 0,
+	"writeError" : {
+		"code" : 2,
+		"errmsg" : "The field 'bestFinds' must be an array but is of type string in document {_id: ObjectId('5cc3b9525cb82377a8c06dc4')}"
+	}
+})
+> db.divers.find().pretty()
+{
+	"_id" : ObjectId("5cc3b8ef5cb82377a8c06dc2"),
+	"name" : "Angie",
+	"yearsDiving" : 4,
+	"stillDiving" : false,
+	"bestFinds" : "midcentury modern desk"
+}
+{
+	"_id" : ObjectId("5cc3b9365cb82377a8c06dc3"),
+	"name" : "Erica",
+	"yearsDiving" : 21,
+	"stillDiving" : true,
+	"bestFinds" : "jerky boyfriends"
+}
+{
+	"_id" : ObjectId("5cc3b9525cb82377a8c06dc4"),
+	"name" : "Lee Ann",
+	"yearsDiving" : 41,
+	"stillDiving" : false,
+	"bestFinds" : "rocking chair"
+}
+> db.divers.update({"name":"Lee Ann"}, {{"bestFinds":[ "kids books"]}})
+2019-04-26T22:14:39.178-0400 E QUERY    [js] SyntaxError: invalid property id @(shell):1:38
+> db.divers.update({"name":"Lee Ann"}, {"bestFinds":[ "kids books"]})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.divers.find().pretty()
+{
+	"_id" : ObjectId("5cc3b8ef5cb82377a8c06dc2"),
+	"name" : "Angie",
+	"yearsDiving" : 4,
+	"stillDiving" : false,
+	"bestFinds" : "midcentury modern desk"
+}
+{
+	"_id" : ObjectId("5cc3b9365cb82377a8c06dc3"),
+	"name" : "Erica",
+	"yearsDiving" : 21,
+	"stillDiving" : true,
+	"bestFinds" : "jerky boyfriends"
+}
+{
+	"_id" : ObjectId("5cc3b9525cb82377a8c06dc4"),
+	"bestFinds" : [
+		"kids books"
+	]
+}
+> db.divers.update({"name":"Lee Ann"}, {$push:{"bestFinds": "rocking chair"}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.divers.find().pretty()
+{
+	"_id" : ObjectId("5cc3b8ef5cb82377a8c06dc2"),
+	"name" : "Angie",
+	"yearsDiving" : 4,
+	"stillDiving" : false,
+	"bestFinds" : "midcentury modern desk"
+}
+{
+	"_id" : ObjectId("5cc3b9365cb82377a8c06dc3"),
+	"name" : "Erica",
+	"yearsDiving" : 21,
+	"stillDiving" : true,
+	"bestFinds" : "jerky boyfriends"
+}
+{
+	"_id" : ObjectId("5cc3b9525cb82377a8c06dc4"),
+	"bestFinds" : [
+		"kids books"
+	]
+}
+> db.divers.insert({"name":"Lee Ann", "yearsDiving": 40, "stillDiving": true, "bestFinds":[ "rocking chair"]})
+WriteResult({ "nInserted" : 1 })
+> db.divers.find().pretty()
+{
+	"_id" : ObjectId("5cc3b8ef5cb82377a8c06dc2"),
+	"name" : "Angie",
+	"yearsDiving" : 4,
+	"stillDiving" : false,
+	"bestFinds" : "midcentury modern desk"
+}
+{
+	"_id" : ObjectId("5cc3b9365cb82377a8c06dc3"),
+	"name" : "Erica",
+	"yearsDiving" : 21,
+	"stillDiving" : true,
+	"bestFinds" : "jerky boyfriends"
+}
+{
+	"_id" : ObjectId("5cc3b9525cb82377a8c06dc4"),
+	"bestFinds" : [
+		"kids books"
+	]
+}
+{
+	"_id" : ObjectId("5cc3bb7d5cb82377a8c06dc5"),
+	"name" : "Lee Ann",
+	"yearsDiving" : 40,
+	"stillDiving" : true,
+	"bestFinds" : [
+		"rocking chair"
+	]
+}
+> db.divers.update({"name":"Lee Ann"}, {$push:{"bestFinds": "kids books"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.divers.find().pretty()
+{
+	"_id" : ObjectId("5cc3b8ef5cb82377a8c06dc2"),
+	"name" : "Angie",
+	"yearsDiving" : 4,
+	"stillDiving" : false,
+	"bestFinds" : "midcentury modern desk"
+}
+{
+	"_id" : ObjectId("5cc3b9365cb82377a8c06dc3"),
+	"name" : "Erica",
+	"yearsDiving" : 21,
+	"stillDiving" : true,
+	"bestFinds" : "jerky boyfriends"
+}
+{
+	"_id" : ObjectId("5cc3b9525cb82377a8c06dc4"),
+	"bestFinds" : [
+		"kids books"
+	]
+}
+{
+	"_id" : ObjectId("5cc3bb7d5cb82377a8c06dc5"),
+	"name" : "Lee Ann",
+	"yearsDiving" : 40,
+	"stillDiving" : true,
+	"bestFinds" : [
+		"rocking chair",
+		"kids books"
+	]
+}
+> db.divers.remove({_id:ObjectId("5cc3b9525cb82377a8c06dc4")})
+WriteResult({ "nRemoved" : 1 })
+> db.divers.find().pretty()
+{
+	"_id" : ObjectId("5cc3b8ef5cb82377a8c06dc2"),
+	"name" : "Angie",
+	"yearsDiving" : 4,
+	"stillDiving" : false,
+	"bestFinds" : "midcentury modern desk"
+}
+{
+	"_id" : ObjectId("5cc3b9365cb82377a8c06dc3"),
+	"name" : "Erica",
+	"yearsDiving" : 21,
+	"stillDiving" : true,
+	"bestFinds" : "jerky boyfriends"
+}
+{
+	"_id" : ObjectId("5cc3bb7d5cb82377a8c06dc5"),
+	"name" : "Lee Ann",
+	"yearsDiving" : 40,
+	"stillDiving" : true,
+	"bestFinds" : [
+		"rocking chair",
+		"kids books"
+	]
+}
+> 
